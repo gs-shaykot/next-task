@@ -119,7 +119,7 @@ export default function Home() {
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-gray-900 flex-1">{paper.title}</h3>
                   <div className="w-5 h-5 flex items-center justify-center ml-2">
-                    <RiExternalLinkLine className="ri-external-link-line text-blue-600"/>
+                    <RiExternalLinkLine className="ri-external-link-line text-blue-600" />
                   </div>
                 </div>
                 <p className="text-gray-600 mb-2">By {paper.author} • {paper.university}</p>
@@ -136,7 +136,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Student Reviews</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {reviews.map((review, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border">
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
                     <span className="text-blue-600 font-semibold text-sm">
