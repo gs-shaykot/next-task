@@ -9,7 +9,7 @@ const pacifico = Pacifico({
 export default function Navbar() {
     const NavItems = () => (
         <>
-            <li><Link href="/home" className='font-semibold'>Home</Link></li>
+            <li><Link href="/" className='font-semibold'>Home</Link></li>
             <li><Link href="/collages" className='font-semibold'>Collages</Link></li>
             <li><Link href="/admission" className='font-semibold'>Admission</Link></li>
             <li><Link href="/myCollages" className='font-semibold'>My College</Link></li>
