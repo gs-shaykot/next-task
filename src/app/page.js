@@ -1,15 +1,11 @@
-"use client";
-
-import { useState } from 'react';
-import SearchBar from './home_Component/(components)/SearchBar';
+import axios from 'axios';
 import Image from 'next/image';
-import CollegeCard from './home_Component/(components)/CollegeCard';
 import StarRating from './home_Component/(components)/StarRating';
 import { RiExternalLinkLine } from 'react-icons/ri';
+import ClientHome from './home_Component/ClientHome';
+import ReviewSlider from './home_Component/ReviewSlider';
 
-export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-
+export default async function Home() {
   const featuredColleges = [
     {
       id: '1',
@@ -56,41 +52,19 @@ export default function Home() {
     { title: 'Biomedical Engineering Breakthroughs', author: 'David Kim', university: 'Stanford', field: 'Bioengineering' },
   ];
 
-  const reviews = [
-    { name: 'Alex Thompson', university: 'Stanford University', rating: 5, comment: 'Exceptional research opportunities and world-class faculty. The innovation culture here is unmatched.' },
-    { name: 'Maria Garcia', university: 'Harvard University', rating: 5, comment: 'Incredible academic rigor and networking opportunities. The alumni network opens so many doors.' },
-    { name: 'James Wilson', university: 'MIT', rating: 4, comment: 'Best tech education you can get. The hands-on projects and startup ecosystem are amazing.' },
-    { name: 'Sophie Lee', university: 'Stanford University', rating: 5, comment: 'Life-changing experience. The interdisciplinary approach really broadened my perspective.' },
-  ];
+  let reviews = [];
 
-  const filteredColleges = featuredColleges.filter((college) =>
-    college.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews`);
+    reviews = res.data;
+  } catch (error) {
+    console.error('Failed to fetch reviews:', error.message);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Find Your Perfect College</h1>
-          <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
-            Discover top universities, explore programs, and take the next step in your academic journey
-          </p>
-          <div className="mt-8">
-            <SearchBar onSearch={setSearchQuery} />
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Featured Colleges */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Colleges</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredColleges.map((college) => (
-              <CollegeCard key={college.id} {...college} />
-            ))}
-          </div>
-        </section>
+      <ClientHome featuredColleges={featuredColleges} />
+      <div className="max-w-7xl mx-auto px-4 py-12">
 
         {/* Gallery */}
         <section className="mb-16">
@@ -98,12 +72,12 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {galleryImages.map((image, index) => (
               <div key={index} className="aspect-[4/3] overflow-hidden rounded-lg">
-                <img
-                  width="190px"
-                  height="142px"
+                <Image
+                  width={190}
+                  height={142}
                   src={image}
                   alt={`Graduate group ${index + 1}`}
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform cursor-pointer"
+                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
                 />
               </div>
             ))}
@@ -115,12 +89,10 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Research</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {researchPapers.map((paper, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900 flex-1">{paper.title}</h3>
-                  <div className="w-5 h-5 flex items-center justify-center ml-2">
-                    <RiExternalLinkLine className="ri-external-link-line text-blue-600" />
-                  </div>
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="flex justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900">{paper.title}</h3>
+                  <RiExternalLinkLine className="text-blue-600 w-5 h-5" />
                 </div>
                 <p className="text-gray-600 mb-2">By {paper.author} • {paper.university}</p>
                 <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
@@ -132,30 +104,7 @@ export default function Home() {
         </section>
 
         {/* Reviews */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Student Reviews</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {reviews.map((review, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-blue-600 font-semibold text-sm">
-                      {review.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{review.name}</h4>
-                    <p className="text-sm text-gray-600">{review.university}</p>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <StarRating rating={review.rating} readonly />
-                </div>
-                <p className="text-gray-700 text-sm">{review.comment}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <ReviewSlider reviews={reviews} />
       </div>
     </div>
   );

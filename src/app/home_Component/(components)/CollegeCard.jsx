@@ -1,4 +1,5 @@
-'use client'; 
+'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { AiFillStar } from 'react-icons/ai';
 import { RiCalendarLine, RiFileTextLine } from 'react-icons/ri';
@@ -18,7 +19,9 @@ export default function CollegeCard({
     return (
         <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
             <div className="aspect-video overflow-hidden">
-                <img
+                <Image
+                    width={379}
+                    height={214}
                     src={image}
                     alt={name}
                     className="w-full h-full object-cover object-top"

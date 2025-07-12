@@ -1,3 +1,4 @@
+// here is the code for SearchBar.jsx
 'use client';
 import { useState } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
