@@ -10,9 +10,9 @@ export default function Navbar() {
     const NavItems = () => (
         <>
             <li><Link href="/" className='font-semibold'>Home</Link></li>
-            <li><Link href="/collages" className='font-semibold'>Collages</Link></li>
+            <li><Link href="/colleges" className='font-semibold'>Colleges</Link></li>
             <li><Link href="/admission" className='font-semibold'>Admission</Link></li>
-            <li><Link href="/myCollages" className='font-semibold'>My College</Link></li>
+            <li><Link href="/myColleges" className='font-semibold'>My College</Link></li>
         </>
     );
 
@@ -33,7 +33,7 @@ export default function Navbar() {
                             <NavItems />
                         </ul>
                     </div>
-                    <Link href='/' className={`text-2xl font-bold ${pacifico.className} text-blue-600`}>CollageHub</Link>
+                    <Link href='/' className={`text-2xl font-bold ${pacifico.className} text-blue-600`}>CollegeHub</Link>
                 </div>
 
                 {/* Move NavItems to the right */}

@@ -19,7 +19,7 @@ export default function Hero() {
                             <input
                                 type="text"
                                 className="text-black block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg bg-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder='search collages'
+                                placeholder='search colleges'
                             />
                             <button
                                 type="submit"
