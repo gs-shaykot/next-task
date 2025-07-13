@@ -1,4 +1,4 @@
-import axios from 'axios'; 
+import axios from 'axios';
 import CollegeReviewSection from './CollegeReviewSection';
 
 const colleges = [
@@ -61,17 +61,17 @@ export default async function MyCollegePage() {
         'Cache-Control': 'no-store',
       },
     });
-    appliedData = res.data; 
+    appliedData = res.data;
   } catch (error) {
     console.error('Error fetching applied colleges:', error.message);
   }
 
   let myCollege = null;
   if (Array.isArray(appliedData) && appliedData.length > 0) {
-    const firstCollegeId = appliedData[0]?.collegeId;
-    myCollege = colleges.find((college) => college.id === firstCollegeId);
+    const firstCollageName = appliedData[0]?.collegeName;
+    myCollege = colleges.find((college) => college.name === firstCollageName);
   }
-
+  console.log(myCollege)
   if (!myCollege) {
     return <p className="text-center py-20 text-red-500">No college data found.</p>;
   }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import axios from 'axios';
@@ -12,11 +13,18 @@ const IMGBB_API_KEY = 'e8a03c0344e72a7c00267c41075f84f5';
 export default function AdmissionPage() {
     const { user } = useContext(AuthContext);
     const router = useRouter();
- 
-    const [selectedCollege, setSelectedCollege] = useState('');
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors }
+    } = useForm();
+
+    const [selectedCollegeId, setSelectedCollegeId] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
 
     useEffect(() => {
         if (!user) {
@@ -27,15 +35,7 @@ export default function AdmissionPage() {
     if (!user) {
         return null;
     }
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors }
-    } = useForm();
-
+ 
     const colleges = [
         { id: '1', name: 'Stanford University' },
         { id: '2', name: 'Harvard University' },
@@ -44,9 +44,11 @@ export default function AdmissionPage() {
         { id: '5', name: 'Princeton University' },
         { id: '6', name: 'Yale University' }
     ];
+
     const watchAddress = watch('address', '');
+
     const onSubmit = async (data) => {
-        if (!selectedCollege) {
+        if (!selectedCollegeId) {
             alert('Please select a college');
             return;
         }
@@ -69,22 +71,25 @@ export default function AdmissionPage() {
 
             const { image, ...rest } = data;
 
+            const collegeName = colleges.find(college => college.id === selectedCollegeId)?.name;
+
             const submissionData = {
                 ...rest,
-                collegeId: selectedCollege,
+                collegeName,
                 imageUrl
             };
+
             const response = await axios.post('/api/applied', submissionData);
             if (response.status !== 200) {
                 throw new Error('Failed to submit application');
-            }
-            else if (response.status === 200) {
+            } else {
                 alert('Application submitted successfully!');
             }
+
             console.log('Form submitted:', submissionData);
             setSubmitted(true);
             reset();
-            setSelectedCollege('');
+            setSelectedCollegeId('');
         } catch (error) {
             console.error('Image upload or submission failed:', error);
             alert('Submission failed. Please try again.');
@@ -136,15 +141,15 @@ export default function AdmissionPage() {
                                         type="radio"
                                         name="college"
                                         value={college.id}
-                                        checked={selectedCollege === college.id}
-                                        onChange={(e) => setSelectedCollege(e.target.value)}
+                                        checked={selectedCollegeId === college.id}
+                                        onChange={(e) => setSelectedCollegeId(e.target.value)}
                                         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                                     />
                                     <span className="ml-3 text-gray-700">{college.name}</span>
                                 </label>
                             ))}
                         </div>
-                        {!selectedCollege && (
+                        {!selectedCollegeId && (
                             <p className="mt-2 text-red-500 text-sm">Please select a college</p>
                         )}
                     </div>
@@ -153,7 +158,7 @@ export default function AdmissionPage() {
                     <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Application Form</h2>
 
-                        {!selectedCollege ? (
+                        {!selectedCollegeId ? (
                             <div className="text-center py-8">
                                 <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4 bg-gray-100 rounded-full">
                                     <RiSchoolLine className="text-2xl text-gray-400" />
