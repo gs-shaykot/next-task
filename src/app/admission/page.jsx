@@ -35,15 +35,16 @@ export default function AdmissionPage() {
     if (!user) {
         return null;
     }
- 
+
     const colleges = [
-        { id: '1', name: 'Stanford University' },
-        { id: '2', name: 'Harvard University' },
-        { id: '3', name: 'MIT' },
-        { id: '4', name: 'University of California, Berkeley' },
-        { id: '5', name: 'Princeton University' },
-        { id: '6', name: 'Yale University' }
+        { id: '1', name: 'Stanford University', UniAddress: '450 Serra Mall, Stanford, CA 94305, USA' },
+        { id: '2', name: 'Harvard University', UniAddress: 'Massachusetts Hall, Cambridge, MA 02138, USA' },
+        { id: '3', name: 'MIT', UniAddress: '77 Massachusetts Ave, Cambridge, MA 02139, USA' },
+        { id: '4', name: 'University of California, Berkeley', UniAddress: '200 California Hall, Berkeley, CA 94720, USA' },
+        { id: '5', name: 'Princeton University', UniAddress: 'Princeton, NJ 08544, USA' },
+        { id: '6', name: 'Yale University', UniAddress: 'New Haven, CT 06520, USA' }
     ];
+    //
 
     const watchAddress = watch('address', '');
 
@@ -72,10 +73,12 @@ export default function AdmissionPage() {
             const { image, ...rest } = data;
 
             const collegeName = colleges.find(college => college.id === selectedCollegeId)?.name;
+            const collegeAddr = colleges.find(college => college.id === selectedCollegeId)?.UniAddress;
 
             const submissionData = {
                 ...rest,
                 collegeName,
+                collegeAddr,
                 imageUrl
             };
 

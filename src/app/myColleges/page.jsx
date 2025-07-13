@@ -70,8 +70,7 @@ export default async function MyCollegePage() {
   if (Array.isArray(appliedData) && appliedData.length > 0) {
     const firstCollageName = appliedData[0]?.collegeName;
     myCollege = colleges.find((college) => college.name === firstCollageName);
-  }
-  console.log(myCollege)
+  } 
   if (!myCollege) {
     return <p className="text-center py-20 text-red-500">No college data found.</p>;
   }
