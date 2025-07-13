@@ -56,7 +56,7 @@ export default async function MyCollegePage() {
   let appliedData = [];
 
   try {
-    const res = await axios.get(`http://localhost:3000/api/applied`, {
+    const res = await axios.get(`https://next-task-plum.vercel.app/api/applied`, {
       headers: {
         'Cache-Control': 'no-store',
       },

@@ -55,7 +55,7 @@ export default async function Home() {
   let reviews = [];
 
   try {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews`);
+    const res = await axios.get(`https://next-task-plum.vercel.app/api/reviews`);
     reviews = res.data;
   } catch (error) {
     console.error('Failed to fetch reviews:', error.message);
