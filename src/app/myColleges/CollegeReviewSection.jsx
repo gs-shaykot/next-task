@@ -10,8 +10,7 @@ export default function CollegeReviewSection({ myCollege, appliedData }) {
     const [isSubmittingReview, setIsSubmittingReview] = useState(false);
     const [reviews, setReviews] = useState([]);
     const { user } = useContext(AuthContext)
-
-    console.log(myCollege, user)
+ 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
