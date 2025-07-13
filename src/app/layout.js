@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import AuthProvider from "./context/AuthProvider";
+import ClientLayout from "@/Client_layout/ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +29,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${roboto.className} antialiased`}
       >
-        <div>
-          <Navbar />
-        </div>
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

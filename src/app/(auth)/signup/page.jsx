@@ -1,10 +1,16 @@
+// implement the signup feature using the authContext and google or normal
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Import react-icons for remix icons used
+import { Pacifico } from 'next/font/google';
+const pacifico = Pacifico({
+    subsets: ['latin'],
+    weight: ['400'],
+});
+
 import {
     RiMailLine,
     RiPhoneLine,
@@ -17,6 +23,7 @@ import {
     RiGoogleFill,
     RiFacebookFill,
 } from 'react-icons/ri';
+import { AuthContext } from '@/app/context/AuthProvider';
 
 export default function SignupPage() {
     const router = useRouter();
@@ -36,6 +43,7 @@ export default function SignupPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errors, setErrors] = useState({});
+    const { createUser, googleSignUp } = useContext(AuthContext);
 
     const handleInputChange = (e) => {
         const { name, value, type } = e.target;
@@ -124,15 +132,30 @@ export default function SignupPage() {
         e.preventDefault();
 
         if (!validateStep2()) return;
-
         setIsLoading(true);
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        try {
+            await createUser(formData.email, formData.password);
+            router.push('/login?message=Account created successfully');
+        } catch (error) {
+            console.error("Signup error:", error.message);
+            alert("Signup failed: " + error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-        // Mock successful signup
-        setIsLoading(false);
-        router.push('/login?message=Account created successfully');
+    const handleGoogleSignup = async () => {
+        try {
+            setIsLoading(true);
+            await googleSignUp();
+            router.push('/');
+        } catch (error) {
+            console.error("Google Sign-in failed:", error.message);
+            alert("Google sign-in failed: " + error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const universities = [
@@ -152,7 +175,7 @@ export default function SignupPage() {
             <div className="max-w-md w-full space-y-8">
                 {/* Header */}
                 <div className="text-center">
-                    <Link href="/" className="text-3xl font-bold text-blue-600 mb-6 inline-block" style={{ fontFamily: 'var(--font-pacifico)' }}>
+                    <Link href="/" className={`${pacifico.className} text-3xl font-bold text-blue-600 mb-6 inline-block`}>
                         CollegeHub
                     </Link>
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
@@ -458,19 +481,18 @@ export default function SignupPage() {
                                 </div>
                             </div>
 
-                            <div className="mt-6 grid grid-cols-2 gap-3">
-                                <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer">
+                            <div className="mt-6">
+                                <button
+                                    onClick={handleGoogleSignup}
+                                    type="button"
+                                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer"
+                                >
                                     <div className="w-5 h-5 flex items-center justify-center mr-2">
                                         <RiGoogleFill className="text-red-500 w-5 h-5" />
                                     </div>
                                     Google
                                 </button>
-                                <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer">
-                                    <div className="w-5 h-5 flex items-center justify-center mr-2">
-                                        <RiFacebookFill className="text-blue-600 w-5 h-5" />
-                                    </div>
-                                    Facebook
-                                </button>
+
                             </div>
                         </>
                     )}

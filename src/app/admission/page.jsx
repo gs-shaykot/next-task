@@ -1,16 +1,32 @@
 'use client';
 
 import axios from 'axios';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiCheckLine, RiSchoolLine, RiLoaderLine } from 'react-icons/ri';
+import { AuthContext } from '../context/AuthProvider';
 
 const IMGBB_API_KEY = 'e8a03c0344e72a7c00267c41075f84f5';
 
 export default function AdmissionPage() {
+    const { user } = useContext(AuthContext);
+    const router = useRouter();
+ 
     const [selectedCollege, setSelectedCollege] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+    useEffect(() => {
+        if (!user) {
+            router.replace('/login');
+        }
+    }, [user, router]);
+
+    if (!user) {
+        return null;
+    }
 
     const {
         register,
@@ -51,12 +67,12 @@ export default function AdmissionPage() {
                 imageUrl = res.data.data.url;
             }
 
-            const { image, ...rest } = data;   
+            const { image, ...rest } = data;
 
             const submissionData = {
-                ...rest,               
+                ...rest,
                 collegeId: selectedCollege,
-                imageUrl              
+                imageUrl
             };
             const response = await axios.post('/api/applied', submissionData);
             if (response.status !== 200) {

@@ -1,14 +1,15 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import StarRating from '../home_Component/(components)/StarRating';
 import Image from 'next/image';
+import { AuthContext } from '../context/AuthProvider';
 
 export default function CollegeReviewSection({ myCollege, appliedData }) {
     const [newReview, setNewReview] = useState({ rating: 0, comment: '' });
     const [isSubmittingReview, setIsSubmittingReview] = useState(false);
     const [reviews, setReviews] = useState([]);
-
+    const {user}=useContext(AuthContext) 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -38,8 +39,9 @@ export default function CollegeReviewSection({ myCollege, appliedData }) {
             const res = await axios.post('/api/reviews', {
                 rating: newReview.rating,
                 comment: newReview.comment,
-                user: 'John Doe',
-                collegeId: myCollege.id,
+                name: user?.displayName,
+                university: myCollege.name,
+                photo: user?.photoURL
             });
 
             if (res.data?.success) {

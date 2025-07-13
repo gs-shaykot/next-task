@@ -27,9 +27,9 @@ export default function ReviewSlider({ reviews }) {
                         <div className="bg-white p-6 rounded-xl shadow-sm h-full">
                             <div className="flex items-center mb-4">
                                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    <span className="text-blue-600 font-semibold text-sm">
-                                        {review.name?.split(' ').map(n => n[0]).join('')}
-                                    </span>
+                                        <span className="text-blue-600 font-semibold text-sm">
+                                            {review.name?.split(' ').map(n => n[0]).join('')}
+                                        </span>
                                 </div>
                                 <div>
                                     <h4 className="font-semibold text-gray-900">{review.name}</h4>

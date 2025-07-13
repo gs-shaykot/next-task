@@ -1,19 +1,28 @@
+// complete the login functionality
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
- 
-import { 
-  RiMailLine, 
-  RiLockLine, 
-  RiEyeLine, 
-  RiEyeOffLine, 
-  RiGoogleFill, 
-  RiFacebookFill 
+
+import { Pacifico } from 'next/font/google';
+const pacifico = Pacifico({
+  subsets: ['latin'],
+  weight: ['400'],
+});
+
+import {
+  RiMailLine,
+  RiLockLine,
+  RiEyeLine,
+  RiEyeOffLine,
+  RiGoogleFill,
+  RiFacebookFill
 } from 'react-icons/ri';
+import { AuthContext } from '@/app/context/AuthProvider';
 
 export default function LoginPage() {
+  const { logInUser, googleSignUp } = useContext(AuthContext);
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
@@ -61,14 +70,29 @@ export default function LoginPage() {
 
     if (!validateForm()) return;
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+      await logInUser(formData.email, formData.password);
+      router.push('/');
+    } catch (error) {
+      console.error(error.message);
+      alert('Login failed: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Mock successful login
-    setIsLoading(false);
-    router.push('/');
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      await googleSignUp();
+      router.push('/');
+    } catch (error) {
+      console.error("Google login failed:", error.message);
+      alert("Google login failed: " + error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,7 +100,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <Link href="/" className="text-3xl font-bold text-blue-600 mb-6 inline-block" style={{ fontFamily: 'var(--font-pacifico)' }}>
+          <Link href="/" className={`${pacifico.className} text-3xl font-bold text-blue-600 mb-6 inline-block`}>
             CollegeHub
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
@@ -103,9 +127,8 @@ export default function LoginPage() {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm ${errors.email ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Enter your email"
                 />
               </div>
@@ -129,9 +152,8 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm ${errors.password ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Enter your password"
                 />
                 <button
@@ -189,18 +211,15 @@ export default function LoginPage() {
           </div>
 
           {/* Social Login */}
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer">
+          <div className="mt-6">
+            <button
+              onClick={handleGoogleLogin}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer"
+            >
               <div className="w-5 h-5 flex items-center justify-center mr-2 text-red-500">
                 <RiGoogleFill />
               </div>
               Google
-            </button>
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer">
-              <div className="w-5 h-5 flex items-center justify-center mr-2 text-blue-600">
-                <RiFacebookFill />
-              </div>
-              Facebook
             </button>
           </div>
         </div>
