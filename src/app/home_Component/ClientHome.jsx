@@ -22,12 +22,14 @@ export default function ClientHome({ featuredColleges }) {
                     <SearchBar onSearch={setSearchQuery} />
                 </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mt-10 mb-8">Featured Colleges</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredColleges.map((college) => (
-                    <CollegeCard key={college.id} {...college} />
-                ))}
-            </div>
+            <section className='max-w-7xl mx-auto px-4 py-12'>
+                <h2 className="container mx-auto text-3xl font-bold text-gray-900 mt-10 mb-8">Featured Colleges</h2>
+                <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredColleges.map((college) => (
+                        <CollegeCard key={college.id} {...college} />
+                    ))}
+                </div>
+            </section>
         </section>
     );
 }

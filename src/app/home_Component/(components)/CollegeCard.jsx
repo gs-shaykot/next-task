@@ -17,7 +17,7 @@ export default function CollegeCard({
     showDetails = true
 }) {
     return (
-        <div className="bg-white w-11/12 md:w-auto mx-auto rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+        <div className="bg-white w-11/12 container mx-auto rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
             <div className="aspect-video overflow-hidden">
                 <Image
                     width={379}
