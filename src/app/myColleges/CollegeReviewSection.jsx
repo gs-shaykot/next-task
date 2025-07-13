@@ -9,7 +9,9 @@ export default function CollegeReviewSection({ myCollege, appliedData }) {
     const [newReview, setNewReview] = useState({ rating: 0, comment: '' });
     const [isSubmittingReview, setIsSubmittingReview] = useState(false);
     const [reviews, setReviews] = useState([]);
-    const {user}=useContext(AuthContext) 
+    const { user } = useContext(AuthContext)
+
+    console.log(myCollege, user)
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -36,13 +38,13 @@ export default function CollegeReviewSection({ myCollege, appliedData }) {
 
         setIsSubmittingReview(true);
         try {
-            const res = await axios.post('/api/reviews', {
+            const postData = {
                 rating: newReview.rating,
                 comment: newReview.comment,
                 name: user?.displayName,
                 university: myCollege.name,
-                photo: user?.photoURL
-            });
+            }
+            const res = await axios.post('/api/reviews',postData);
 
             if (res.data?.success) {
                 const createdReview = {
