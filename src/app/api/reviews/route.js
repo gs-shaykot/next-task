@@ -49,8 +49,8 @@ export async function POST(req) {
     const review = {
       rating: data.rating,
       comment: data.comment,
-      user: data?.user,
-      collegeId: data.collegeId ,
+      name: data?.name,
+      university: data.university ,
       date: new Date(),
     };
 
